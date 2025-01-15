@@ -6,6 +6,7 @@ pipeline {
       idleMinutes 1
     }
   }
+  
   stages {
     stage('Build') {
       parallel {
@@ -18,6 +19,7 @@ pipeline {
         }
       }
     }
+    
     stage('Static Analysis') {
       parallel {
         stage('Unit Tests') {
@@ -44,6 +46,7 @@ pipeline {
         }
       }
     }
+    
     stage('Package') {
       parallel {
         stage('Create Jarfile') {
