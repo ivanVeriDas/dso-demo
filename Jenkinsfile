@@ -47,7 +47,7 @@ pipeline {
         stage('OSSLicenseChecker') {
           steps {
             container('licensefinder') {
-              sh 'ls-al'
+              sh 'ls -al'
               sh '''#!/bin/bash --login
                       /bin/bash --login
                       rvm use default
@@ -56,6 +56,19 @@ pipeline {
                     '''
             }
           }
+        }
+      }
+    }
+
+    stage('SAST') {
+      steps {
+        container('slscan') {
+          sh 'scan --type java,depscan --build'
+        }
+      }
+      post {
+        success {
+          archiveArtifacts allowEmptyArchive: true, artifacts: 'reports/*', fingerprint: true, onlyIfSuccessful: true
         }
       }
     }
