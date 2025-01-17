@@ -95,6 +95,25 @@ pipeline {
       }
     }
 
+    stage('Image Analysis') {
+      parallel {
+        stage('Image Linting') {
+          steps {
+            container('docker-tools') {
+              sh 'dockle igulinaveridas/dso-demo:1.2.0'
+            }
+          }
+        }
+        stage('Image Scan') {
+          steps {
+            container('docker-tools') {
+              sh 'trivy image --timeout 10m --exit-code 1 igulinaveridas/dso-demo:1.2.0'
+            }
+          }
+        }
+      }
+    }
+
     stage('Deploy to Dev') {
       steps {
         // TODO
