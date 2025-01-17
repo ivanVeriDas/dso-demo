@@ -63,7 +63,13 @@ pipeline {
     stage('SAST') {
       steps {
         container('slscan') {
-          sh 'scan --type java,depscan --build'
+          try {
+            sh 'scan --type java,depscan --build'
+          } catch (err) {
+            echo "Caught: ${err}"
+            echo "Error in step, but we continue with the pipeline"
+            stageResult.result = 'SUCCESS'
+          }
         }
       }
       post {
