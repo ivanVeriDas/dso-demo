@@ -121,6 +121,16 @@ pipeline {
       }
     }
 
+    stage('Scan k8s Deploy Code') {
+      steps {
+        container('docker-tools') {
+          catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
+            sh 'kubesec scan deploy/dso-demo-deploy.yaml'
+          }
+        }
+      }
+    }
+
     stage('Deploy to Dev') {
       environment {
         AUTH_TOKEN = credentials('argocd-jenkins-deployer-token')
