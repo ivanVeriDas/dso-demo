@@ -17,6 +17,8 @@ spec:
       labels:
         app: dso-demo
     spec:
+      automountServiceAccountToken: false
+      serviceAccountName: dso-demo
       containers:
       - image: igulinaveridas/dso-demo
         name: dso-demo
